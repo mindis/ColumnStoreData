@@ -1,0 +1,1 @@
+SELECT str1,str2,num,thousandth,dyn1,dyn2 WHERE num BETWEEN 0 AND 100

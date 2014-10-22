@@ -1,0 +1,7 @@
+To Run, execute following commands:
+
+make SimpleQueryExecutor
+
+./run SimpleQueryExecutor ColStoreEng nobench_data.json query/query_6_0(you can make your own query files and use it here) 1
+
+./run SimpleQueryExecutor ColStoreEng nobench_data.json query/query_6_0 1

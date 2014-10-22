@@ -1,0 +1,4 @@
+./run SimpleQueryExecutor ColStoreEng nobench_data.json query/query_6_0 1
+
+make SimpleQueryExecutor
+
