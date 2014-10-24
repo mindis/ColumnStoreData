@@ -31,7 +31,7 @@ public class ColStoreEng extends StoreEngine  {
 
     /* key+type as the key for the hash table */
     Hashtable<String, ByteBuffer> colBufs; 
-	private ByteBuffer stringBuffer;
+	private ByteBuffer stringBuffer;	
 
     /**
      * Creates a ring buffer, and using Column format to store the data
@@ -44,8 +44,9 @@ public class ColStoreEng extends StoreEngine  {
         /* create colum Buffer hash table */ 
         colBufs = new Hashtable<String, ByteBuffer>();  
         // 1. rakib: print the actual memory thats being used....
-        System.out.println("Rakib: actual memory thats being used...\n"+ memory_size_in_bytes+ " bytes");
+        System.out.println("Rakib: actual memory thats being used: "+ memory_size_in_bytes/1024+ " MB");
 		stringBuffer = ByteBuffer.allocateDirect(max_buf_size*10);
+		System.out.println("Allocated memory for stringBuffer: "+ (max_buf_size*10/1024) + " MB");
     }
 
     /**
@@ -85,10 +86,30 @@ public class ColStoreEng extends StoreEngine  {
 			buf.putLong(position);
 			
 			//2. rakib change it
-			stringBuffer.putInt(value.length());
-			stringBuffer.put(value.getBytes());
-            //buf.putInt(value.length());
-            //buf.put(value.getBytes());
+			// Compression Related Objects
+			Utility object = new Utility();
+			String compressionOption = "BEST_COMPRESSION";
+						
+			try{			
+				System.out.println ("Original Incoming String Length: "+ value.getBytes().length+ "bytes");
+				System.out.println ("Original Incoming String: "+ value);	
+				CompressedData compressedOutput = object.compressString(value, compressionOption);				
+				System.out.println ("Size of Compressed Data: "+ compressedOutput.compressedDataLength+ " bytes");			
+				stringBuffer.putInt(compressedOutput.compressedDataLength);
+				System.out.println ("Compressed Data (bytes): "+compressedOutput.getCompressedData());
+				stringBuffer.put(compressedOutput.getCompressedData());				
+//				stringBuffer.putInt(value.length());
+//				stringBuffer.put(value.getBytes());
+				System.out.println("stringBuffer: "+ stringBuffer);
+				System.out.println("==========================================");
+				
+	            //buf.putInt(value.length());
+	            //buf.put(value.getBytes());
+			}
+			catch(IOException ioe){
+				System.out.println("Exception Message:"+ ioe);
+			}
+
         }
         
         return 1;

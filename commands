@@ -2,3 +2,11 @@
 
 make SimpleQueryExecutor
 
+./run SimpleQueryExecutor ColStoreEng nobench_data.json query/test 1
+
+./run SimpleQueryExecutor ColStoreEng test_nobench_data.json query/test 1
+
+
+
+
+
